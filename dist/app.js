@@ -57,10 +57,10 @@ if(a==='next-question'){const s=state.sessions[state.grade];if(!s||s.selected===
 if(a==='open-card'){initFlash(b.dataset.id);render(true);window.scrollTo(0,0);return;}
 if(a==='review-cards'){initFlash(null,true);render(true);return;}
 if(a==='flip'){flash.flipped=true;render();return;}
-if(a==='flash-prev'){flash.index=Math.max(0,flash.index-1);flash.flipped=false;render();return;}
+if(a==='flash-prev'){flash.index=Math.max(0,flash.index-1);flash.flipped=false;render();document.querySelector('.flash-card')?.scrollIntoView({block:'start',behavior:'auto'});document.querySelector('.flash-card')?.focus({preventScroll:true});return;}
 if(['rate-good','rate-again','flash-next'].includes(a)){
  if(a!=='flash-next'){if(!flash.flipped)return;const c=byId.get(flash.ids[flash.index]);if(c?.quizEligible!==false){C.record(state,c.id,a==='rate-good','card');save();}flash.done++;}
- flash.index=(flash.index+1)%flash.ids.length;flash.flipped=false;render();document.querySelector('.flash-card')?.focus({preventScroll:true});return;
+ flash.index=(flash.index+1)%flash.ids.length;flash.flipped=false;render();document.querySelector('.flash-card')?.scrollIntoView({block:'start',behavior:'auto'});document.querySelector('.flash-card')?.focus({preventScroll:true});return;
 }
 if(a==='detail'){detail(b.dataset.id);return;}if(a==='about'){about();return;}if(a==='close'){document.querySelector('#dialog').close();return;}
 if(a==='all-confusions'){const pairs=data.confusions.filter(p=>p.terms.every(id=>byId.has(id)&&C.inGrade(byId.get(id),state.grade)));showDialog('似ている科目の使い分け',`<div class="dialog-pair">${pairs.map(p=>`<article><h3>${p.terms.map(id=>e(byId.get(id).term)).join(' / ')}</h3><p>${e(p.tip)}</p></article>`).join('')||'<p>この範囲の使い分けは、単語カードの具体例で確認できます。</p>'}</div>`);return;}
